@@ -8,9 +8,15 @@ module Versioning
       end.sort
     end
 
+    def commit_version_file(message="Bump version")
+      execute_git_command("add #{Versioning::VersionFile.file_path}")
+      execute_git_command("commit -m '#{message}'")
+      execute_git_command("push origin master")
+    end
+
     def create_tag(version)
       update_tags
-      execute_git_command("tag #{version.to_s}")
+      execute_git_command("tag -a #{version.to_s} -m 'Version #{version.to_s}'")
       execute_git_command("push --tags")
     end
 
