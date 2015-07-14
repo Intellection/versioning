@@ -16,12 +16,8 @@ namespace :version do
   desc "bump local patch"
   task :bump_patch do
     version = Versioning::VersionFile.read_version
-    # version.bump_patch
-    # Versioning::VersionFile.update(version)
-    puts "..............."
-    puts "executed bump local patch"
-    puts version
-    puts "..............."
+    version.bump_patch
+    Versioning::VersionFile.update(version)
   end
 
   namespace :github do
@@ -56,7 +52,7 @@ namespace :version do
     end
   end
 
-  desc "update localversion with last remote version"
+  desc "update local version with last remote version"
   task :update_from_remote do
     last_version = Versioning::Git.new.get_tags.last
     Versioning::VersionFile.update(last_version)
