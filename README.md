@@ -26,6 +26,10 @@ Create `config/version.txt` file with the initial version
   0.0.1
 ```
 
+Running `rake -T` will list available tasks
+
+```ruby
+...
 rake version:bump_major                 # bump local major version
 rake version:bump_minor                 # bump local minor version
 rake version:bump_patch                 # bump local patch
@@ -33,6 +37,7 @@ rake version:github:bump_major          # bump local and github major versions
 rake version:github:bump_minor          # bump local and github minor versions
 rake version:github:bump_patch          # bump local and github patch versions
 rake version:update_from_remote         # update localversion with last remote version
+```
 
 ## Tagging releases
 
