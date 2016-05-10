@@ -10,7 +10,7 @@ module Versioning
 
     def commit_version_file(message="Bump version")
       execute_git_command("add #{Versioning::VersionFile.file_path}")
-      execute_git_command("commit -m '#{message}'")
+      execute_git_command("commit -m '#{message}' [ci skip]")
       execute_git_command("push origin master")
     end
 
