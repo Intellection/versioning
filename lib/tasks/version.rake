@@ -23,32 +23,36 @@ namespace :version do
   namespace :github do
     desc "bump local and github major versions"
     task :bump_major do
-      git_client = Versioning::Git.new
-      version = git_client.get_tags.last
-      version.bump_major
-      Versioning::VersionFile.update(version)
-      git_client.commit_version_file
-      git_client.create_tag(version)
+      update_version_and_push_changes(:bump_major)
     end
 
     desc "bump local and github minor versions"
     task :bump_minor do
-      git_client = Versioning::Git.new
-      version = git_client.get_tags.last
-      version.bump_minor
-      Versioning::VersionFile.update(version)
-      git_client.commit_version_file
-      git_client.create_tag(version)
+      update_version_and_push_changes(:bump_minor)
     end
 
     desc "bump local and github patch versions"
     task :bump_patch do
-      git_client = Versioning::Git.new
-      version = git_client.get_tags.last
-      version.bump_patch
+      update_version_and_push_changes(:bump_patch)
+    end
+
+    def update_version_and_push_changes(method_name)
+      puts "\e[92mEnter your version changes summary bellow:\e[0m"
+      message = STDIN.gets.chomp
+      raise ArgumentError, "Message can't be blank!" if message == nil || message == ''
+      version = get_last_tag
+      version.public_send(method_name)
       Versioning::VersionFile.update(version)
       git_client.commit_version_file
-      git_client.create_tag(version)
+      git_client.create_tag(version, message)
+    end
+
+    def get_last_tag
+      git_client.get_tags.last
+    end
+
+    def git_client
+      @git_client ||= Versioning::Git.new
     end
   end
 

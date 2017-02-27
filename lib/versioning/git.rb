@@ -14,9 +14,9 @@ module Versioning
       execute_git_command("push origin master")
     end
 
-    def create_tag(version)
+    def create_tag(version, message="")
       update_tags
-      execute_git_command("tag -a #{version.to_s} -m 'Version #{version.to_s}'")
+      execute_git_command("tag -a #{version.to_s} -m 'Version #{version.to_s} - #{message}'")
       execute_git_command("push --tags")
     end
 
