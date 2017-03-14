@@ -66,7 +66,7 @@ namespace :version do
               { title: 'Changes', value: changes, short: false }
             ]
           }
-          Versioning::SlackBot.new(app_name, webhook).send_message("#{git_user} has released a new version of #{app_name}!", message)
+          Versioning::Slackbot.new(app_name, webhook).send_message("#{git_user} has released a new version of #{app_name}!", message)
         end
       end
     end
