@@ -37,7 +37,7 @@ namespace :version do
     end
 
     def update_version_and_push_changes(method_name)
-      raise "You must be on the master branch to bump a version, switch to master branch and try again!".red unless get_branch == 'master'
+      raise "\e[31mYou must be on the master branch to bump a version, switch to master branch and try again!\e[0m" unless get_branch == 'master'
       puts "\e[92mEnter your version changes summary bellow:\e[0m"
       message = STDIN.gets.chomp
       raise ArgumentError, "Message can't be blank!" if message == nil || message == ''
@@ -62,7 +62,7 @@ namespace :version do
             break
           when 'N'
             loop do
-              puts 'It is not advised to delay deploying the app! This can cause issues!'.red
+              puts "\e[31mIt is not advised to delay deploying the app! This can cause issues!\e[0m"
               puts 'Would you like to deploy NOW?'
               print '[Y]es/ [N]o : '
               choice = STDIN.gets.chomp.upcase
