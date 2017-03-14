@@ -37,7 +37,7 @@ namespace :version do
     end
 
     def update_version_and_push_changes(method_name)
-      raise "You must be on the master branch to bump a version, switch to master branch and try again!".red unless get_branch == 'sandbox'
+      raise "You must be on the master branch to bump a version, switch to master branch and try again!".red unless get_branch == 'master'
       puts "\e[92mEnter your version changes summary bellow:\e[0m"
       message = STDIN.gets.chomp
       raise ArgumentError, "Message can't be blank!" if message == nil || message == ''
