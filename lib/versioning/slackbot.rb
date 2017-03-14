@@ -1,7 +1,8 @@
+require 'slack-notifier'
 module Versioning
-  class SlackBot
+  class Slackbot
     def initialize(bot_name, webhook)
-      @slack = Slack::Notifier.new(
+      @slack = ::Slack::Notifier.new(
           webhook,
           icon_url: "https://emoji.slack-edge.com/T029T8PL3/amasin/44186c586fd6b087.jpg",
           username: bot_name
