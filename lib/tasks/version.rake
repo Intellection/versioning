@@ -37,14 +37,59 @@ namespace :version do
     end
 
     def update_version_and_push_changes(method_name)
+      raise "You must be on the master branch to bump a version, switch to master branch and try again!".red unless get_branch == 'sandbox'
       puts "\e[92mEnter your version changes summary bellow:\e[0m"
       message = STDIN.gets.chomp
       raise ArgumentError, "Message can't be blank!" if message == nil || message == ''
+
       version = get_last_tag
       version.public_send(method_name)
       Versioning::VersionFile.update(version)
       git_client.commit_version_file
       git_client.create_tag(version, message)
+
+      run_deployment
+    end
+
+    def run_deployment
+      loop do
+        puts 'Would you like to deploy the app to production?'
+        print '[Y]es/ [N]o : '
+        choice = STDIN.gets.chomp.upcase
+        case choice
+          when 'Y'
+            deploy_app
+            break
+          when 'N'
+            loop do
+              puts 'It is not advised to delay deploying the app! This can cause issues!'.red
+              puts 'Would you like to deploy NOW?'
+              print '[Y]es/ [N]o : '
+              choice = STDIN.gets.chomp.upcase
+              case choice
+                when 'Y'
+                  deploy_app
+                  break
+                when 'N'
+                  break
+                else
+                  puts 'Unknown command, please type either Y or N'
+              end
+            end
+            break
+          else
+            puts 'Unknown command, please type either Y or N'
+        end
+      end
+    end
+
+    def deploy_app
+      system 'cap production deploy'
+    end
+
+    def get_branch
+      current_branch = `git rev-parse --abbrev-ref HEAD`
+      current_branch.strip
     end
 
     def get_last_tag
