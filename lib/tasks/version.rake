@@ -48,7 +48,35 @@ namespace :version do
       git_client.commit_version_file
       git_client.create_tag(version, message)
 
+      ping_channels(message, version)
+
       run_deployment
+    end
+
+    def ping_channels(changes, version)
+      webhooks = AppConfig.webhooks
+      if webhooks
+        webhooks.each do |webhook|
+          message = {
+            color: "#000000",
+            author_name: git_user,
+            fields: [
+              { title: 'Version', value: version.to_s, short: true },
+              { title: 'App', value: app_name, short: true },
+              { title: 'Changes', value: changes, short: false }
+            ]
+          }
+          Versioning::SlackBot.new(app_name, webhook).send_message("#{git_user} has released a new version of #{app_name}!", message)
+        end
+      end
+    end
+
+    def app_name
+      @app_name ||= Rails.application.class.parent_name
+    end
+
+    def git_user
+      @user ||= `git config --global user.name`.strip rescue "Unknown user"
     end
 
     def run_deployment
