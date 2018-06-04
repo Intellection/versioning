@@ -129,7 +129,7 @@ namespace :version do
     end
 
     def port_control_name
-      case @app_name
+      case app_name
       when 'ZappiStoreApp' then 'zappistore'
       when 'DataCollector' then 'data-collector'
       end
