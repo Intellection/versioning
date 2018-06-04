@@ -112,7 +112,7 @@ namespace :version do
     end
 
     def deploy_app
-      system 'cap production deploy'
+      system "portctl deploy #{port_control_name} production"
     end
 
     def get_branch
@@ -126,6 +126,13 @@ namespace :version do
 
     def git_client
       @git_client ||= Versioning::Git.new
+    end
+
+    def port_control_name
+      case @app_name
+      when 'ZappiStoreApp' then 'zappistore'
+      when 'DataCollector' then 'data-collector'
+      end
     end
   end
 
